@@ -1,5 +1,5 @@
 # dSPACE Indy Autonomous Challenge Simulator
-This repository contains the current state of the SUT-TE-bridge implementation for the dSPACE IAC simulation environment. The bridge enables the data exchange between the dSPACE ASM car and environment model and ROS2. If you encounter bugs or missing features, feel free to open an issue and/or create a branch for your implementation and merge it back into the main branch later on.
+This repository contains the current state of the SUT-TE-bridge implementation for the dSPACE IAC simulation environment. The bridge enables the data exchange between the dSPACE ASM car and environment model and ROS2. If you encounter bugs or missing features, feel free to open an issue and/or create a branch for your implementation and merge it back into the main branch later on. Long term it is planned to make this repository open source, for the moment every team member needs to request access separately.
 
 This documents enables you to get started with the minimal local setup of the dSPACE Indy Autonomous Challenge simulator.
 
