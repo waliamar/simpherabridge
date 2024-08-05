@@ -310,7 +310,7 @@ namespace bridge {
         if(this->simTotalMsec % (this->pubIntervalFoxgloveMap) == 0)
     	  {
           SutTeBridgeNode::publishFoxgloveMap();
-          SutTeBridgeNode::publishFoxgloveSceneUpdate();
+          // SutTeBridgeNode::publishFoxgloveSceneUpdate();
         }
 
         this->vesiDataAvailabe = false;
