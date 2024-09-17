@@ -1,0 +1,3 @@
+[submodule "ros_ws_aux/src/schemas"]
+	path = ros_ws_aux/src/schemas
+	url = https://github.com/foxglove/schemas.git
