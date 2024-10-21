@@ -12,7 +12,7 @@ You need to have access to the following instances:
 - dSPACE IAC license server
 - SIMPHERA AWS docker registry
 
-## Use
+## How to
 The following instructions assume an execution in a Linux environment, either on a Linux host system or in WSL. This means that all given commands and scripts are written for Linux. However the execution also works for Windows and Mac, you just need to adapt the commands and scripts slightly for your preferred OS.
 
 ### Execute
