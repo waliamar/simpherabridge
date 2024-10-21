@@ -12,7 +12,7 @@ You need to have access to the following instances:
 - dSPACE IAC license server
 - SIMPHERA AWS docker registry
 
-## Using
+## Use
 The following instructions assume an execution in a Linux environment, either on a Linux host system or in WSL. This means that all given commands and scripts are written for Linux. However the execution also works for Windows and Mac, you just need to adapt the commands and scripts slightly for your preferred OS.
 
 ### Execute
@@ -37,3 +37,14 @@ The following instructions assume an execution in a Linux environment, either on
     2. `./ros2build`
     3. `./ros2run`
 7. To shut down the simulation, open another terminal and execute `docker compose -f docker-compose_sut_te_bridge_foxglove.yml down --remove-orphans`
+
+### Contribute
+In general the bridge is maintained by dSPACE, so if you find any missing features or bugs it would be great if you make use of the github issue feature to share them with us.
+If you would like to package the simulation data in ROS publishers/subscribers, that are currently not supported e.g. CAN or dbw_raptor messages, the following section should provide some guidance how to easily achieve that.
+In case that these additional interfaces might be useful to other teams, it would be great, if you could push your changes to a seperate branch and create a pull request, so that they become available for the rest of the community.
+1. Add declaration of the publishers/subscribers to the [bridge.h](ros2_bridge_ws/src/sut_te_bridge/include/bridge.h) header
+2. Initialize publishers similar to lines 112-144 in [bridge.cpp](ros2_bridge_ws/src/sut_te_bridge/src/bridge.cpp#L112-L144)
+3. Initialize subscribers similar to lines 147-148 in [bridge.cpp](ros2_bridge_ws/src/sut_te_bridge/src/bridge.cpp#L147-L148)
+4. Implement publisher function which accesses the data stored in this->CanBus object, creates ROS messages from it and publishes it using your publisher from step 2
+5. Add call to the publisher function to the [publishSimulationState function](ros2_bridge_ws/src/sut_te_bridge/src/bridge.cpp#L278-L323)
+6. Implement callback functions for your subscribers from step 3, which read the corresponding ROS messages and write the data to this->feedbackCmd object
