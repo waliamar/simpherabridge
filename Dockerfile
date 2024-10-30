@@ -8,15 +8,7 @@ ENV ENABLE_LOG=false
 
 RUN apt-get update
 RUN apt-get update && \
-    apt-get install -y openssh-server xauth build-essential libboost-all-dev python3-colcon-common-extensions git cmake g++ software-properties-common gdb
-
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends wget python3-pip debconf python3 python3-setuptools && \
-    cp /etc/supervisor/conf.d/supervisord.conf /etc/supervisord.conf && \
-    pip3 install --no-cache-dir supervisor==4.2.* supervisor-console==0.5.* supervisord-dependent-startup==1.4.* 2>&1 && \
-    mkdir -p /etc/opt/dspace/supervisord /var/log/supervisor/ && \
-    chmod 755 /etc/opt/dspace/supervisord && \
-    chmod 777 /var/log/supervisor
+    apt-get install -y --no-install-recommends openssh-server xauth build-essential libboost-all-dev python3-colcon-common-extensions git cmake g++ software-properties-common gdb wget python3-pip debconf python3 python3-setuptools
 
 RUN rosdep update && \
     echo 'source /opt/ros/humble/local_setup.bash' >> /root/.bashrc
