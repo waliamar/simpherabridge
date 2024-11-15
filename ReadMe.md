@@ -43,8 +43,8 @@ In general the bridge is maintained by dSPACE, so if you find any missing featur
 If you would like to package the simulation data in ROS publishers/subscribers, that are currently not supported e.g. CAN or dbw_raptor messages, the following section should provide some guidance how to easily achieve that.
 In case that these additional interfaces might be useful to other teams, it would be great, if you could push your changes to a seperate branch and create a pull request, so that they become available for the rest of the community.
 1. Add declaration of the publishers/subscribers to the [bridge.h](ros2_bridge_ws/src/sut_te_bridge/include/bridge.h) header
-2. Initialize publishers similar to lines 112-144 in [bridge.cpp](ros2_bridge_ws/src/sut_te_bridge/src/bridge.cpp#L127-L162)
-3. Initialize subscribers similar to lines 147-148 in [bridge.cpp](ros2_bridge_ws/src/sut_te_bridge/src/bridge.cpp#L164-L167)
+2. Initialize publishers similar to lines 127-162 in [bridge.cpp](ros2_bridge_ws/src/sut_te_bridge/src/bridge.cpp#L127-L162)
+3. Initialize subscribers similar to lines 164-167 in [bridge.cpp](ros2_bridge_ws/src/sut_te_bridge/src/bridge.cpp#L164-L167)
 4. Implement publisher function which accesses the data stored in this->CanBus object, creates ROS messages from it and publishes it using your publisher from step 2
 5. Add call to the publisher function to the [publishSimulationState function](ros2_bridge_ws/src/sut_te_bridge/src/bridge.cpp#L363-L408)
 6. Implement callback functions for your subscribers from step 3, which read the corresponding ROS messages and write the data to this->feedbackCmd object
