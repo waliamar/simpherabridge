@@ -2437,6 +2437,9 @@ typedef struct
   real32_T lap_time;
   real32_T time_stamp;
   uint8_T sys_state;
+  uint8_T push2pass_status;
+  real32_T push2pass_budget_s;
+  real32_T push2pass_active_app_limit;
 } race_control;
 typedef struct 
 {

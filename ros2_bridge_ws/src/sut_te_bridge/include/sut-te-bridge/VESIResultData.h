@@ -14,7 +14,9 @@ typedef struct
     uint8_t enable_throttle_cmd;
 
     // Brake pressure command (kPa)
-    float brake_cmd;
+    float brake_cmd_front;
+    float brake_cmd_rear;
+    uint8_t brake_bias_switch;
     uint8_t brake_cmd_count;
     uint8_t enable_brake_cmd;
 
@@ -36,6 +38,8 @@ typedef struct
     uint8_t ct_state;
     uint8_t rolling_counter;
     uint8_t veh_num;
+
+    uint8_t push2pass_request;
 }
 ToRaptor;
 
