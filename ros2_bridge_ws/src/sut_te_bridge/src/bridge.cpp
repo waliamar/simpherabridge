@@ -7,19 +7,31 @@ namespace bridge {
 
   SutTeBridgeNode::SutTeBridgeNode() : Node("sut_te_bridge_node")
   {
-    std::cout << "Set SimManager Host IP to: "<< std::getenv("VESI_IP") << std::endl;
     if (std::getenv("VESI_IP")){
       this->api.setSimManagerHost(std::getenv("VESI_IP"));
+      std::cout << "Set SimManager Host IP to: "<< std::getenv("VESI_IP") << std::endl;
     } else {
       this->api.setSimManagerHost("127.0.0.1");
+      std::cout << "Set SimManager Host IP to: 127.0.0.1 (default)" std::endl;
     }
-    std::cout << "Set ASM Host IP to: " << std::getenv("ASM_IP") << std::endl;
+    
     if (std::getenv("ASM_IP")){
       this->api.setASMHost(std::getenv("ASM_IP"));
+      std::cout << "Set ASM Host IP to: " << std::getenv("ASM_IP") << std::endl;
     } else {
       this->api.setASMHost("127.0.0.1");
+      std::cout << "Set ASM Host IP to: 127.0.0.1 (default)" << std::endl;
     }
-    std::cout << "Set Publish interval" << std::endl;
+       
+    if (std::getenv("SIMMANAGER_PORT")){
+      this->api.setSimManagerPort(std::stoi(std::getenv("SIMMANAGER_PORT")));
+      std::cout << "Set SimManager Host Port to: "<< std::getenv("SIMMANAGER_PORT") << std::endl;
+    } else {
+      this->api.setSimManagerPort(12345);
+      std::cout << "Set SimManager Host Port to: 12345 (default)"<< std::endl;
+    }
+
+    std::cout << "Set Publish intervals" << std::endl;
     if (std::getenv("PUB_ITV_RACE_CONTROL_DATA")){
       this->pubIntervalRaceControlData = static_cast<uint32_t>(std::stoul(std::string(std::getenv("PUB_ITV_RACE_CONTROL_DATA"))));
     } else {
@@ -71,13 +83,11 @@ namespace bridge {
       this->enableTimeRecord = false;
     }
 
-    std::cout << "Set SimManager Host Port to: 12345"<< std::endl;
-    this->api.setSimManagerPort(12345);
     std::cout << "Set Custom Data required to: true"<< std::endl;
     this->api.setCustomDataRequired(true);
 
-    std::cout << "Trying to connect to V-ESI at: " << std::getenv("VESI_IP") << " : 12345" << std::endl;
-    std::cout << "Trying to connect to ASM at: " << std::getenv("ASM_IP") << " with CustomDataInterface set to: true" << std::endl;
+    std::cout << "Trying to connect to V-ESI at SimManager IP and Port" << std::endl;
+    std::cout << "Trying to connect to ASM at ASM IP with CustomDataInterface set to: true" << std::endl;
     bool vesiConnection = false;
     int16_t retries = 1;
     int16_t max_retries = 1;
@@ -744,8 +754,8 @@ namespace bridge {
     // Push2Pass Message
 
     p2pData.push2pass_status = this->canBus->asm_bus_var.race_control_var.push2pass_status;
-    p2pData.push2pass_budget_s = (uint16_t) this->canBus->asm_bus_var.race_control_var.push2pass_budget_s;
-    p2pData.push2pass_active_app_limit = (uint8_t) this->canBus->asm_bus_var.race_control_var.push2pass_active_app_limit;
+    p2pData.push2pass_budget_s = this->canBus->asm_bus_var.race_control_var.push2pass_budget_s;
+    p2pData.push2pass_active_app_limit = this->canBus->asm_bus_var.race_control_var.push2pass_active_app_limit;
 
     // Header
     p2pData.header.frame_id = "";

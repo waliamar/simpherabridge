@@ -1,7 +1,7 @@
 #include <stdint.h>
 #ifndef VESI_SUT_FEEDBACK_STRUCT_H
 #define VESI_SUT_FEEDBACK_STRUCT_H
-
+#include "rtwtypes.h"
 #pragma pack(push, 1)
 
 
@@ -39,7 +39,7 @@ typedef struct
     uint8_t rolling_counter;
     uint8_t veh_num;
 
-    uint8_t push2pass_request;
+    boolean_T push2pass_request;
 }
 ToRaptor;
 
