@@ -746,7 +746,7 @@ namespace bridge {
   {
     if (this->verbosePrinting)
     {
-      std::cout << "publishRaceControlData" << '\n';
+      std::cout << "publishPush2PassFeedback" << '\n';
     }
 
     auto p2pData = autonoma_msgs::msg::Push2Pass();
