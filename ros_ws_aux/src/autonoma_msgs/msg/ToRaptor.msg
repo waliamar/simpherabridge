@@ -5,4 +5,4 @@ uint8 ct_state
 uint8 rolling_counter
 uint8 veh_num
 
-uint8 push2pass_request
+bool push2pass_request
