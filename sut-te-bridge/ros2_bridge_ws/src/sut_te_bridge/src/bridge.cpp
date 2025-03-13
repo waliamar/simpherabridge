@@ -587,6 +587,27 @@ namespace bridge {
     {
       std::cout << "sendVehicleFeedbackToSimulation" << '\n';
     }
+    if (this->raptorDataAvailabe == false && this->stackRaptorConnectionWarningSent == false)
+    {
+      std::cerr << "Did not receive to_raptor message. This might lead to unexpected behavior of the RaceControl e.g. setting of flags and P2P is not available. Check that your stack is alive." << '\n';
+      this->stackRaptorConnectionWarningSent = true;
+    }
+    else if (this->raptorDataAvailabe == true && this->stackRaptorConnectionWarningSent == true)
+    {
+      std::cerr << "to_raptor message received." << '\n';
+      this->stackRaptorConnectionWarningSent = false;
+    }
+
+    if (this->feedbackDataAvailabe == false && this->stackFeedbackConnectionWarningSent == false)
+    {
+      std::cerr << "Did not receive vehicle_inputs message. The vehicle might move in an unexpected way. Check that your stack is alive." << '\n';
+      this->stackFeedbackConnectionWarningSent = true;
+    }
+    else if (this->feedbackDataAvailabe == true && this->stackFeedbackConnectionWarningSent == true)
+    {
+      std::cerr << "vehicle_inputs message received." << '\n';
+      this->stackFeedbackConnectionWarningSent = false;
+    }
 
     this->api.sendControlData(22222,std::addressof(this->feedbackCmd),sizeof(this->feedbackCmd));
     if(this->simModeEnabled)
