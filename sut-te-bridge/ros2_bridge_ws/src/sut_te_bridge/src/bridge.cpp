@@ -115,16 +115,16 @@ namespace bridge {
       }
       catch(const std::exception& e)
       {
-        std::cerr << "Failed to configure V-ESI: " << e.what() << std::endl
+        std::cerr << "Failed to configure V-ESI: " << e.what() << std::endl;
         if (retries < max_retries)
         {
-          std::cout << "Failed for the " << retries << " time. Try again." << std::endl
+          std::cout << "Failed for the " << retries << " time. Try again." << std::endl;
           retries++;
           rclcpp::sleep_for(1s);
         }
         else
         {
-          std::cout << "Failed too often. Exit." << std::endl
+          std::cout << "Failed too often. Exit." << std::endl;
           throw e;
         }
       }
@@ -180,7 +180,7 @@ namespace bridge {
 
       if(this->simModeEnabled)
       {
-        std::cout << "Use Simulated Clock." << std::endl
+        std::cout << "Use Simulated Clock." << std::endl;
         this->simClockTimePublisher_ = this->create_publisher<rosgraph_msgs::msg::Clock>("clock", sim_qos);      
         this->simTimeIncrease_ = this->create_subscription<std_msgs::msg::UInt16>("sim_time_increase", sim_qos, std::bind(&SutTeBridgeNode::simTimeIncreaseCallback, this, _1));
         vesiCallback();
@@ -189,13 +189,13 @@ namespace bridge {
       }
       else
       {
-        std::cout << "Use Wall Clock (system clock)." << std::endl
+        std::cout << "Use Wall Clock (system clock)." << std::endl;
         this->updateVESIVehicleInputs_ = this->create_wall_timer(10ms, std::bind(&SutTeBridgeNode::vesiCallback, this));
       }
     }
     catch(const std::exception& e)
     {
-      std::cerr << "Failed to create object for SUT-TE-Bridge node: " << e.what() << std::endl
+      std::cerr << "Failed to create object for SUT-TE-Bridge node: " << e.what() << std::endl;
     }
 
     if (this->enableTimeRecord)
@@ -210,14 +210,14 @@ namespace bridge {
       std::cout << "Log created under path: " << std::string(this->pathTimeRecord) << std::endl;
     }
 
-    std::cout << "Setup done." << std::endl
+    std::cout << "Setup done." << std::endl;
   }
 
   void SutTeBridgeNode::initializeFeedback()
   {
     if (this->verbosePrinting)
     {
-      std::cout << "initializeFeedback" << std::endl
+      std::cout << "initializeFeedback" << std::endl;
     }
 
     this->maneuverStarted = false;
@@ -267,7 +267,7 @@ namespace bridge {
   {
     if (this->verbosePrinting)
     {
-      std::cout << "vesiCallback" << std::endl
+      std::cout << "vesiCallback" << std::endl;
     }
 
     if (this->enableTimeRecord)
@@ -360,7 +360,7 @@ namespace bridge {
     }
     catch(const std::exception& e)
     {
-      std::cerr << "Failed to request data from ASM: " << e.what() << std::endl
+      std::cerr << "Failed to request data from ASM: " << e.what() << std::endl;
     }
 
     if (this->enableTimeRecord){
@@ -377,7 +377,7 @@ namespace bridge {
   {
     if (this->verbosePrinting)
     {
-      std::cout << "publishSimulationState" << std::endl
+      std::cout << "publishSimulationState" << std::endl;
     }
 
     try
@@ -417,7 +417,7 @@ namespace bridge {
     }
     catch(const std::exception& e)
     {
-      std::cerr << "Publishing of data failed" << e.what() << std::endl
+      std::cerr << "Publishing of data failed" << e.what() << std::endl;
     }
   }
 
@@ -425,7 +425,7 @@ namespace bridge {
   {
     if (this->verbosePrinting)
     {
-      std::cout << "publishFoxgloveMap" << std::endl
+      std::cout << "publishFoxgloveMap" << std::endl;
     }
 
     // Best Pos
@@ -459,7 +459,7 @@ namespace bridge {
   {
     if (this->verbosePrinting)
     {
-      std::cout << "publishFoxgloveSceneUpdate" << std::endl
+      std::cout << "publishFoxgloveSceneUpdate" << std::endl;
     }
 
     auto foxgloveScene = foxglove_msgs::msg::SceneUpdate();
@@ -498,7 +498,7 @@ namespace bridge {
 
     if (this->verbosePrinting)
     {
-      std::cout << "publish ego position" << std::endl
+      std::cout << "publish ego position" << std::endl;
     }
     this->egoPositionPublisher_->publish(egoPosition);
 
@@ -524,7 +524,7 @@ namespace bridge {
 
     if (this->verbosePrinting)
     {
-      std::cout << "add ego position " << this->canBus->sim_interface_var.vehicle_sensors_var.fellow_count << std::endl
+      std::cout << "add ego position " << this->canBus->sim_interface_var.vehicle_sensors_var.fellow_count << std::endl;
     }
 
     fellows.cubes[this->canBus->sim_interface_var.vehicle_sensors_var.fellow_count].pose.position.x = egoPosition.transform.translation.x;
@@ -549,7 +549,7 @@ namespace bridge {
     {
       if (this->verbosePrinting)
       {
-        std::cout << "add fellow position " << vehicleID << std::endl
+        std::cout << "add fellow position " << vehicleID << std::endl;
       }
       fellows.cubes[vehicleID].pose.position.x = this->canBus->sim_interface_var.vehicle_sensors_var.ground_truth_var.lat[vehicleID];
       fellows.cubes[vehicleID].pose.position.y = this->canBus->sim_interface_var.vehicle_sensors_var.ground_truth_var.lon[vehicleID];
@@ -576,7 +576,7 @@ namespace bridge {
 
     if (this->verbosePrinting)
     {
-      std::cout << "publish scene update" << std::endl
+      std::cout << "publish scene update" << std::endl;
     }
     this->foxgloveScenePublisher_->publish(foxgloveScene);
   }
@@ -585,27 +585,27 @@ namespace bridge {
   {
     if (this->verbosePrinting)
     {
-      std::cout << "sendVehicleFeedbackToSimulation" << std::endl
+      std::cout << "sendVehicleFeedbackToSimulation" << std::endl;
     }
     if (this->raptorDataAvailabe == false && this->stackRaptorConnectionWarningSent == false)
     {
-      std::cerr << "Did not receive to_raptor message. This might lead to unexpected behavior of the RaceControl e.g. setting of flags and P2P is not available. Check that your stack is alive." << std::endl
+      std::cerr << "Did not receive to_raptor message. This might lead to unexpected behavior of the RaceControl e.g. setting of flags and P2P is not available. Check that your stack is alive." << std::endl;
       this->stackRaptorConnectionWarningSent = true;
     }
     else if (this->raptorDataAvailabe == true && this->stackRaptorConnectionWarningSent == true)
     {
-      std::cerr << "to_raptor message received." << std::endl
+      std::cerr << "to_raptor message received." << std::endl;
       this->stackRaptorConnectionWarningSent = false;
     }
 
     if (this->feedbackDataAvailabe == false && this->stackFeedbackConnectionWarningSent == false)
     {
-      std::cerr << "Did not receive vehicle_inputs message. The vehicle might move in an unexpected way. Check that your stack is alive." << std::endl
+      std::cerr << "Did not receive vehicle_inputs message. The vehicle might move in an unexpected way. Check that your stack is alive." << std::endl;
       this->stackFeedbackConnectionWarningSent = true;
     }
     else if (this->feedbackDataAvailabe == true && this->stackFeedbackConnectionWarningSent == true)
     {
-      std::cerr << "vehicle_inputs message received." << std::endl
+      std::cerr << "vehicle_inputs message received." << std::endl;
       this->stackFeedbackConnectionWarningSent = false;
     }
 
@@ -620,7 +620,7 @@ namespace bridge {
   {
     if (this->verbosePrinting)
     {
-      std::cout << "subscribeVehicleCommandsCallback" << std::endl
+      std::cout << "subscribeVehicleCommandsCallback" << std::endl;
     }
 
     // Throttle command (%)
@@ -652,7 +652,7 @@ namespace bridge {
   {
     if (this->verbosePrinting)
     {
-      std::cout << "subscribeRaptorCommandsCallback" << std::endl
+      std::cout << "subscribeRaptorCommandsCallback" << std::endl;
     }
 
     // time 5 end "stack_answer_time_toraptor"
@@ -669,7 +669,7 @@ namespace bridge {
     {
       if (this->numberWarningSent == false)
       {
-        std::cerr << "Vehicle number should not be 0 or 255. Will be replaced by 254. Change this configuration to enable multi car racing." << std::endl
+        std::cerr << "Vehicle number should not be 0 or 255. Will be replaced by 254. Change this configuration to enable multi car racing." << std::endl;
         this->numberWarningSent = true;
       }
       this->feedbackCmd.to_raptor.veh_num = 254;
@@ -684,7 +684,7 @@ namespace bridge {
   {
     if (this->verbosePrinting)
     {
-      std::cout << "switchRaceControlSourceCallback" << std::endl
+      std::cout << "switchRaceControlSourceCallback" << std::endl;
     }
 
     this->useCustomRaceControl = msg.data;
@@ -694,7 +694,7 @@ namespace bridge {
   {
     if (this->verbosePrinting)
     {
-      std::cout << "publishRaceControlData" << std::endl
+      std::cout << "publishRaceControlData" << std::endl;
     }
 
     auto raceControlData = autonoma_msgs::msg::RaceControl();
@@ -767,7 +767,7 @@ namespace bridge {
   {
     if (this->verbosePrinting)
     {
-      std::cout << "publishPush2PassFeedback" << std::endl
+      std::cout << "publishPush2PassFeedback" << std::endl;
     }
 
     auto p2pData = autonoma_msgs::msg::Push2Pass();
@@ -799,7 +799,7 @@ namespace bridge {
   {
     if (this->verbosePrinting)
     {
-      std::cout << "publishVehicleData" << std::endl
+      std::cout << "publishVehicleData" << std::endl;
     }
 
     auto vehicleData = autonoma_msgs::msg::VehicleData();
@@ -882,7 +882,7 @@ namespace bridge {
   {
     if (this->verbosePrinting)
     {
-      std::cout << "publishPowertrainData" << std::endl
+      std::cout << "publishPowertrainData" << std::endl;
     }
     
     auto powertrainData = autonoma_msgs::msg::PowertrainData();
@@ -984,7 +984,7 @@ namespace bridge {
 
     if (this->verbosePrinting)
     {
-      std::cout << "publishVectorNavData" << std::endl
+      std::cout << "publishVectorNavData" << std::endl;
     }
 
     auto attitudeGroup = vectornav_msgs::msg::AttitudeGroup();
@@ -1384,7 +1384,7 @@ namespace bridge {
   {
     if (this->verbosePrinting)
     {
-      std::cout << "publishNovatelData" << std::endl
+      std::cout << "publishNovatelData" << std::endl;
     }
     
     nova_tel_pwr_pak currentNovatel;
@@ -1706,7 +1706,7 @@ int main(int argc, char * argv[])
   }
   catch(const std::exception& e)
   {
-    std::cerr << "Failed to initialize SUT-TE-Bridge node: " << e.what() << std::endl
+    std::cerr << "Failed to initialize SUT-TE-Bridge node: " << e.what() << std::endl;
   }
   
 }
