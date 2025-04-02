@@ -1,0 +1,1 @@
+docker build -t iac_sut_te_bridge_foxglove:latest .

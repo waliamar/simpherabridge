@@ -5,9 +5,7 @@ float32 throttle_cmd
 uint8 throttle_cmd_count
 
 # Brake pressure command (kPa)
-float32 brake_cmd_front
-float32 brake_cmd_rear
-uint8 brake_bias_switch
+float32 brake_cmd
 uint8 brake_cmd_count
 
 # Steering motor angle command (degrees)

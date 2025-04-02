@@ -12,24 +12,6 @@ You need to have access to the following instances:
 - dSPACE IAC license server
 - SIMPHERA AWS docker registry
 
-## Structure of this repository
-The following section provides an overview of the repository content, in order to speed up the process of finding what you are looking for and provide an understanding, where to add things when contributing.
-
-### Dockerfile
-This Dockerfile is used to create the sut-te-bridge (simphera and dev version) and the foxglove bridge. The images are differentiated by selecting the target of the docker build command (sut-te-bridge_simphera, sut-te-bridge_dev, sut-te-bridge_foxglove).
-The dev version only contains the dependencies required by both bridge versions (e.g. ROS2, custom message definitions, etc) and a neutral entrypoint, so that could be used to quickly test new developments on the bridge.
-The simphera version contains the compiled sut-te-bridge node and an entrypoint for automatic startup of that node. The simphera version is also recommended to be used for local testing, when working on the SUT code to check whether the system is capable to run with automatic startup procedure used in the cloud.
-The foxglove version contains the foxglove-bridge application and an entrypoint to start the corresponding node.
-
-### runtime_scripts
-This directory contains some scripts, which should make the work with the dev version of the bridge easier.
-
-### ros_ws_aux
-This auxilary ros workspace should contain all ros packages, that are required by simphera and foxglove bridge versions. Currently this contains all custom message definitions used in the system. If you want to make your custom messages available in foxglove, the easiest way would be to add your definitions to this auxilary workspace and rebuild the foxglove bridge. There is no need to add your custom messages to the repository, if they should only be available in foxglove. If they should also be used by the simphera bridge please push them and create a pull request.
-
-### ros2_bridge_ws
-This ros workspace contains the main source code of the sut-te-bridge package. If you want to understand how the connection to the simulator is implemented and which ros topics are published and subscribed, have a look here.
-
 ## How to
 The following instructions assume an execution in a Linux environment, either on a Linux host system or in WSL. This means that all given commands and scripts are written for Linux. However the execution also works for Windows and Mac, you just need to adapt the commands and scripts slightly for your preferred OS.
 

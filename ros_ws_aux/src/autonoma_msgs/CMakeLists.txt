@@ -24,7 +24,6 @@ set(MSG_DEPS std_msgs)
 
 set(MSG_FILES
 "msg/PowertrainData.msg"
-"msg/Push2Pass.msg"
 "msg/RaceControl.msg"
 "msg/ToRaptor.msg"
 "msg/VehicleData.msg"
