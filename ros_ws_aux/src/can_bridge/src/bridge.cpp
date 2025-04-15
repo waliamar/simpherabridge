@@ -6,6 +6,7 @@
 #include <can_dbc_parser/DbcMessage.hpp>
 #include <can_dbc_parser/DbcSignal.hpp>
 #include <builtin_interfaces/msg/time.hpp>
+#include <VESIResultData.h>
 #include <GeographicLib/UTMUPS.hpp>
 #include "ament_index_cpp/get_package_share_directory.hpp"
 
@@ -20,12 +21,12 @@ namespace bridge {
   struct DbcFrameRx {
     NewEagle::DbcMessage* message = NULL;
 
-    DbcFrameRx(const Frame& msg, const MessageID& msgType, NewEagle::Dbc& dbc,
+    DbcFrameRx(const can_msgs::msg::Frame& msg, const MessageID& msgType, NewEagle::Dbc& dbc,
               Time& frame_timestamp) {
       message = dbc.GetMessageById(static_cast<uint32_t>(msgType));
       if (msg.dlc < message->GetDlc()) return;
       frame_timestamp = msg.header.stamp;
-      message->SetFrame(msg);
+      message->SetFrame(std::make_shared<can_msgs::msg::Frame>(msg));
     }
 
     bool valid() const { return message != NULL; }
@@ -103,7 +104,7 @@ namespace bridge {
       this->toRaptorPublisher_ = this->create_publisher<autonoma_msgs::msg::ToRaptor>("to_raptor", qos);
       this->vehicleInputsPublisher_ = this->create_publisher<autonoma_msgs::msg::VehicleInputs>("vehicle_inputs", qos);
 
-      this->canPublisher_ = this->create_publisher<Frame>("from_can_bus", 20); 
+      this->canPublisher_ = this->create_publisher<can_msgs::msg::Frame>("from_can_bus", 20); 
       this->canSubscriber_ = this->create_subscription<can_msgs::msg::Frame>("to_can_bus", qos, std::bind(&CanBridgeNode::canSubscriberCallback, this, _1)); 
       if (this->canPublisher_ == nullptr || this->canSubscriber_ == nullptr) {
         std::cerr << "Failed to create CAN publisher or subscriber!" << std::endl;
@@ -191,7 +192,7 @@ namespace bridge {
     dbcFrame("laps", msg.laps )
             ("lap_time", msg.lap_time)
             ("time_stamp", msg.time_stamp);
-    auto frame = std::make_unique<Frame>(dbcFrame.message->GetFrame()); 
+    auto frame = std::make_unique<can_msgs::msg::Frame>(dbcFrame.message->GetFrame()); 
     if(this->simModeEnabled)
     {
       frame->header.stamp.sec = this->sec;
@@ -216,7 +217,7 @@ namespace bridge {
             ("round_target_speed", msg.round_target_speed)
             ("track_flag", msg.track_flag) //dspace uses mylaps by default
             ("veh_flag", msg.veh_flag);
-    frame = std::make_unique<Frame>(dbcFrame.message->GetFrame());
+    frame = std::make_unique<can_msgs::msg::Frame>(dbcFrame.message->GetFrame());
     if(this->simModeEnabled)
     {
       frame->header.stamp.sec = this->sec;
@@ -239,7 +240,7 @@ namespace bridge {
             ("mode_switch_state", vehicle_data_mode_switch_state) //false: race mode, true: test mode  (currently hard-coded val)
             ("sys_state", msg.sys_state);
             // ("raptor_rolling_counter", rolling_counter_); //currently unused
-    frame = std::make_unique<Frame>(dbcFrame.message->GetFrame());
+    frame = std::make_unique<can_msgs::msg::Frame>(dbcFrame.message->GetFrame());
     if(this->simModeEnabled)
     {
       frame->header.stamp.sec = this->sec;
@@ -260,7 +261,7 @@ namespace bridge {
     // dbcFrame("marelli_track_flag", race_control_track_flag)
     //         ("marelli_vehicle_flag", race_control_veh_flag);
     //         // ("marelli_sector_flag", race_control_sector_flag); //not used
-    // frame = std::make_unique<Frame>(dbcFrame.message->GetFrame());
+    // frame = std::make_unique<can_msgs::msg::Frame>(dbcFrame.message->GetFrame());
     // if(this->simModeEnabled)
     // {
     //   frame->header.stamp.sec = this->sec;
@@ -290,7 +291,7 @@ namespace bridge {
     }
     dbcFrame("acc_pedal_fdbk", msg.accel_pedal_output)
             ("acc_pedal_fdbk_counter", rolling_counter_);
-    auto frame = std::make_unique<Frame>(dbcFrame.message->GetFrame()); //overwrite can frame msg
+    auto frame = std::make_unique<can_msgs::msg::Frame>(dbcFrame.message->GetFrame()); //overwrite can frame msg
     if(this->simModeEnabled)
     {
       frame->header.stamp.sec = this->sec;
@@ -311,7 +312,7 @@ namespace bridge {
     dbcFrame("average_steering_ang_fdbk",msg.steering_wheel_angle) // Angles in degrees
           ("secondary_steering_ang_fdbk", msg.steering_wheel_angle)
           ("primary_steering_angle_fbk", msg.steering_wheel_angle);
-    frame = std::make_unique<Frame>(dbcFrame.message->GetFrame()); 
+    frame = std::make_unique<can_msgs::msg::Frame>(dbcFrame.message->GetFrame()); 
     if(this->simModeEnabled)
     {
       frame->header.stamp.sec = this->sec;
@@ -333,7 +334,7 @@ namespace bridge {
           ("wheel_speed_FR", msg.ws_front_right)
           ("wheel_speed_FL", msg.ws_front_left)
           ("wheel_speed_RR", msg.ws_rear_right);
-    frame = std::make_unique<Frame>(dbcFrame.message->GetFrame()); 
+    frame = std::make_unique<can_msgs::msg::Frame>(dbcFrame.message->GetFrame()); 
     if(this->simModeEnabled)
     {
       frame->header.stamp.sec = this->sec;
@@ -354,7 +355,7 @@ namespace bridge {
     dbcFrame("brake_pressure_fdbk_front", msg.front_brake_pressure)
             ("brake_pressure_fdbk_rear", msg.rear_brake_pressure)
             ("brk_pressure_fdbk_counter", rolling_counter_);
-    frame = std::make_unique<Frame>(dbcFrame.message->GetFrame());
+    frame = std::make_unique<can_msgs::msg::Frame>(dbcFrame.message->GetFrame());
     if(this->simModeEnabled)
     {
       frame->header.stamp.sec = this->sec;
@@ -389,7 +390,7 @@ namespace bridge {
             ("vehicle_speed_kmph", msg.vehicle_speed_kmph)
             ("engine_state", msg.engine_on_status)
             ("gear_shift_status", msg.gear_shift_status);
-    auto frame = std::make_unique<Frame>(dbcFrame.message->GetFrame());  
+    auto frame = std::make_unique<can_msgs::msg::Frame>(dbcFrame.message->GetFrame());  
     if(this->simModeEnabled)
     {
       frame->header.stamp.sec = this->sec;
@@ -412,7 +413,7 @@ namespace bridge {
             ("coolant_temperature", msg.engine_coolant_temperature)
             ("transmission_temperature", msg.transmission_oil_temperature)
             ("transmission_pressure_kPa", msg.transmission_oil_pressure);
-    frame = std::make_unique<Frame>(dbcFrame.message->GetFrame());
+    frame = std::make_unique<can_msgs::msg::Frame>(dbcFrame.message->GetFrame());
     if(this->simModeEnabled)
     {
       frame->header.stamp.sec = this->sec;
@@ -434,7 +435,7 @@ namespace bridge {
             ("torque_wheels", msg.torque_wheels_nm);
             // ("driver_traction_aim_swicth_fbk", powertrainData.driver_traction_aim_switch)
             // ("driver_traction_range_switch_fbk", powertrainData.driver_traction_range_switch);
-    frame = std::make_unique<Frame>(dbcFrame.message->GetFrame());
+    frame = std::make_unique<can_msgs::msg::Frame>(dbcFrame.message->GetFrame());
     if(this->simModeEnabled)
     {
       frame->header.stamp.sec = this->sec;
@@ -527,7 +528,7 @@ namespace bridge {
     }
   }
 
-  void CanBridgeNode::canSubscriberCallback(Frame::UniquePtr msg) 
+  void CanBridgeNode::canSubscriberCallback(can_msgs::msg::Frame::UniquePtr msg) 
   {
     static constexpr std::string_view fl = "FL";
     static constexpr std::string_view fr = "FR";
@@ -570,7 +571,7 @@ namespace bridge {
     }
   } // end can subscriber callback
 
-  void CanBridgeNode::recvBrakePressureCmd(const Frame& msg) {
+  void CanBridgeNode::recvBrakePressureCmd(const can_msgs::msg::Frame& msg) {
     Time stamp;
     DbcFrameRx dbcFrame{msg, MessageID::BRAKE_PRESSURE_CMD, dbwDbc_, stamp};
     if (!dbcFrame.valid()){
@@ -581,7 +582,7 @@ namespace bridge {
             ("brk_pressure_cmd_counter", vehicle_inputs_brake_cmd_count);
   }
 
-  void CanBridgeNode::recvAcceleratorCmd(const Frame& msg) {
+  void CanBridgeNode::recvAcceleratorCmd(const can_msgs::msg::Frame& msg) {
     Time stamp;
     DbcFrameRx dbcFrame{msg, MessageID::ACCELERATOR_CMD, dbwDbc_, stamp};
     if (!dbcFrame.valid()){
@@ -595,7 +596,7 @@ namespace bridge {
     //             "Received accelerator cmd thru CAN:  %f", vehicle_inputs_throttle_cmd);
   }
 
-  void CanBridgeNode::recvSteeringCmd(const Frame& msg) {
+  void CanBridgeNode::recvSteeringCmd(const can_msgs::msg::Frame& msg) {
     Time stamp;
     DbcFrameRx dbcFrame{msg, MessageID::STEERING_CMD, dbwDbc_, stamp};
     if (!dbcFrame.valid()){
@@ -606,7 +607,7 @@ namespace bridge {
             ("steering_motor_cmd_counter", vehicle_inputs_steering_cmd_count);
   }
 
-  void CanBridgeNode::recvGearShiftCmd(const Frame& msg) {
+  void CanBridgeNode::recvGearShiftCmd(const can_msgs::msg::Frame& msg) {
     Time stamp;
     DbcFrameRx dbcFrame{msg, MessageID::GEAR_SHIFT_CMD, dbwDbc_, stamp};
     if (!dbcFrame.valid()){
@@ -616,7 +617,7 @@ namespace bridge {
     dbcFrame("desired_gear", vehicle_inputs_gear_cmd);
   }
 
-  void CanBridgeNode::recvCtReport(const Frame& msg) {
+  void CanBridgeNode::recvCtReport(const can_msgs::msg::Frame& msg) {
     Time stamp;
     DbcFrameRx dbcFrame{msg, MessageID::CT_REPORT, dbwDbc_, stamp};
     if (!dbcFrame.valid()){
@@ -633,7 +634,7 @@ namespace bridge {
   }
 
   // //UNCOMMENT IF UsING MArELLI
-  // void CanBridgeNode::recvCtReport2(const Frame& msg) {
+  // void CanBridgeNode::recvCtReport2(const can_msgs::msg::Frame& msg) {
   //   Time stamp;
   //   DbcFrameRx dbcFrame{msg, MessageID::CT_REPORT_2, dbwDbc_, stamp};
   //   if (!dbcFrame.valid()){

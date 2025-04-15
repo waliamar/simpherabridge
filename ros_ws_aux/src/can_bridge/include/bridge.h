@@ -92,7 +92,7 @@ namespace bridge
         rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr novaTelOdomPublisher2_;
         rclcpp::Publisher<sensor_msgs::msg::NavSatFix>::SharedPtr novaTelFixPublisher2_;
 
-        rclcpp::Publisher<Frame>::SharedPtr canPublisher_;
+        rclcpp::Publisher<can_msgs::msg::Frame>::SharedPtr canPublisher_;
 
         // Subscibers
         rclcpp::Subscription<can_msgs::msg::Frame>::SharedPtr canSubscriber_;
@@ -152,15 +152,15 @@ namespace bridge
         void publishVehicleInputs();
         void publishToRaptor();
 
-        void canSubscriberCallback(Frame::UniquePtr msg);
+        void canSubscriberCallback(can_msgs::msg::Frame::UniquePtr msg);
 
         // //Receiving CAN frames
-        void recvBrakePressureCmd(const Frame& msg);
-        void recvAcceleratorCmd(const Frame& msg);
-        void recvSteeringCmd(const Frame& msg);
-        void recvGearShiftCmd(const Frame& msg);
-        void recvCtReport(const Frame& msg);
-        void recvCtReport2(const Frame& msg);
+        void recvBrakePressureCmd(const can_msgs::msg::Frame& msg);
+        void recvAcceleratorCmd(const can_msgs::msg::Frame& msg);
+        void recvSteeringCmd(const can_msgs::msg::Frame& msg);
+        void recvGearShiftCmd(const can_msgs::msg::Frame& msg);
+        void recvCtReport(const can_msgs::msg::Frame& msg);
+        void recvCtReport2(const can_msgs::msg::Frame& msg);
 
         std::string dbw_dbc_file_;
         NewEagle::Dbc dbwDbc_;
